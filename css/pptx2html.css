@@ -147,3 +147,7 @@ section svg.drawing {
 	min-width: 240px;
 	height: 180px;
 }
+
+select.btn-success {
+	height: 34px;
+}
