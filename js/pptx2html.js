@@ -177,19 +177,39 @@ function saveDataToFile(textJson) {
 	if (!textJson)
 		return;
 
-	var Content = [];
+	if (document.getElementById("export_option_type").value == "TEXT") {
+		var Content = [];
 
-	for (slide in textJson) {
-		Content.push("slide " + slide);
-		Content.push("\n");
-		Content.push("\n");
-		Content.push(textJson[slide]);
-		Content.push("\n");
-		Content.push("\n");
+		for (slide in textJson) {
+			Content.push("slide " + slide);
+			Content.push("\n");
+			Content.push("\n");
+			Content.push(textJson[slide]);
+			Content.push("\n");
+			Content.push("\n");
+		}
+
+		var blob = new Blob(Content, { type: "text/plain;charset=utf-8" });
+		saveAs(blob, "PPT Text Content.txt");
 	}
+	else {
 
-	var blob = new Blob(Content, { type: "text/plain;charset=utf-8" });
-	saveAs(blob, "PPT Text Content.txt");
+		var XLSXContent = [];
+
+		for (slide in textJson) {
+			XLSXContent.push({ "Slide Name": "Slide " + slide, "Content": textJson[slide] })
+		}
+
+		ExportDataASXLSX(XLSXContent);
+	}
+}
+
+function ExportDataASXLSX(data) {
+	filename = 'PPTX.xlsx';
+	var ws = XLSX.utils.json_to_sheet(data);
+	var wb = XLSX.utils.book_new();
+	XLSX.utils.book_append_sheet(wb, ws, "Content");
+	XLSX.writeFile(wb, filename);
 }
 
 function processSingleMsg(d) {
